@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sensor Data Display</title>
+</head>
+<body>
+    <h1>Sensor Data</h1>
+    <p>Temperature: <span id="temperature">Loading...</span> °C</p>
+    <p>Light Intensity: <span id="light_intensity">Loading...</span> %</p>
+
+    <script type="module">
+        // Import the functions you need from the SDKs you need
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+        import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+
+        // Your web app's Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyAE5nnudECg0tR1RKUp6DAYHNIO2dRMtiQ",
+            authDomain: "sisdig-arduino-uno.firebaseapp.com",
+            databaseURL: "https://sisdig-arduino-uno-default-rtdb.asia-southeast1.firebasedatabase.app",
+            projectId: "sisdig-arduino-uno",
+            storageBucket: "sisdig-arduino-uno.appspot.com",
+            messagingSenderId: "1056451082903",
+            appId: "1:1056451082903:web:8331407ea9f004afb207d2"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const database = getDatabase(app);
+
+        // Reference to the sensor data
+        const sensorDataRef = ref(database, 'sensorData/singleEntry');
+
+        // Listen for changes to the sensor data
+        onValue(sensorDataRef, (snapshot) => {
+            const data = snapshot.val();
+            if (data) {
+                document.getElementById('temperature').textContent = data.temperature;
+                document.getElementById('light_intensity').textContent = data.light_intensity;
+            }
+        });
+    </script>
+</body>
+</html>
